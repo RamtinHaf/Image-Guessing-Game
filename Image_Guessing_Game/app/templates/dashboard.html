@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+<div class="container-fluid justify-content-center">
+    {% if err %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <h4 class="alert-heading">Error</h4>
+        <p>{{err}}</p>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endif %}
+    <!-- List all games here to join -->
+    <div class="row">
+        <div class="col-xl-10 col-lg-9 col-sm-12">
+            <div class="row">
+                <div class="col-xl-6 col-lg-12 paddingPlaymode">
+                    <h2>1 v M</h2>
+                    <div class="row">
+                        <table class="table table-striped">
+                        <thead>
+                            <th>Game name</th>
+                            <th>Members</th>
+                            <th></th>
+                        </thead>
+                        <tbody id="game-container-0">
+                            {% for game in games %}
+                                {% if game.get_gamemode_string() == "GameMode.MULTIPLAYER" %}
+                                    <tr id="{{game.get_id()}}">
+                                        <td>{{game.get_id()}}</td>
+                                        <td>{{game.get_numbers_of_players()}}</td>
+                                        <td>
+                                            <form action="/join" method="POST">
+                                            <button name="join" value="{{game.get_id()}}" class="btn btn-success">Join</button>
+                                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                {% if not game.get_proposer() %}
+                                                <label class="btn btn-secondary active"><input type="radio" name="role" value="proposer" autocomplete="off" checked>Proposer</label>
+                                                <label class="btn btn-secondary"><input type="radio" name="role" value="guesser" autocomplete="off">Guesser</label>
+                                                {% else %}
+                                                <label class="btn btn-secondary active"><input type="radio" name="role" value="guesser" autocomplete="off" checked>Guesser</label>
+                                                {% endif %}
+                                            </div>
+
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    </div>
+                    <form action="" method="POST" novalidate>
+                        {{ wtf.form_field(form.new_game_proposer_multiPlayer, class="btn btn-warning") }}
+                        {{ wtf.form_field(form.new_game_guesser_multiPlayer, class="btn btn-success") }}
+                    </form>
+                </div>
+                <div class="col-xl-6 col-lg-12 paddingPlaymode">
+                    <h2>1 v 1</h2>
+                    <div class="row">
+                        <table class="table table-striped">
+                        <thead>
+                            <th>Game name</th>
+                            <th>Members</th>
+                            <th></th>
+                        </thead>
+                        <tbody id="game-container-1">
+                            {% for game in games %}
+                                {% if game.get_gamemode_string() == "GameMode.SINGLEPLAYER" %}
+                                    <tr id="{{game.get_id()}}">
+                                        <td>{{game.get_id()}}</td>
+                                        <td>{{game.get_numbers_of_players()}}</td>
+                                        <td>
+                                            <form action="/join" method="POST">
+                                            <button name="join" value="{{game.get_id()}}" class="btn btn-success">Join</button>
+                                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                {% if not game.get_proposer() %}
+                                                <label class="btn btn-secondary active"><input type="radio" name="role" value="proposer" autocomplete="off" checked>Proposer</label>
+                                                <label class="btn btn-secondary"><input type="radio" name="role" value="guesser" autocomplete="off">Guesser</label>
+                                                {% else %}
+                                                <label class="btn btn-secondary active"><input type="radio" name="role" value="guesser" autocomplete="off" checked>Guesser</label>
+                                                {% endif %}
+                                            </div>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    </div>
+                    <form action="" method="POST" novalidate>
+                        {{ wtf.form_field(form.new_game_proposer_singlePlayer, class="btn btn-warning") }}
+                        {{ wtf.form_field(form.new_game_guesser_singlePlayer, class="btn btn-success") }}
+                    </form>
+                </div>
+                <div class="col-lg-12 col-md-12 paddingPlaymode">
+                    <h2>Play against the machine!</h2>
+                    <p>Train your skill against the super advanced ai.</p>
+                    <form action="" method="POST" novalidate>
+                        {{ wtf.form_field(form.new_game_guesser_ai, class="btn btn-success") }}
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-2 col-lg-3 col-sm-12" style="height: 500px">
+            <div id="leaderboard">
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Points</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+    <style>
+        .paddingPlaymode{
+            padding: 2em;
+        }
+    </style>
+<script>
+    window.onload = function() {
+        initAjax();
+        setInterval(initAjax, 5000);
+    }
+</script>
+{% endblock %}

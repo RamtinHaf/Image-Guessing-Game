@@ -1,0 +1,18 @@
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col"></th>
+            <th scope="col">Username</th>
+            <th scope="col">Points</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for player in players %}
+            <tr>
+                <th scope="row">{{ loop.index }}</th>
+                <td>{{ player.username }}</td>
+                <td>{{ player.points }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

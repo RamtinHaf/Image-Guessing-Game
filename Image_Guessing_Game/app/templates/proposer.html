@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+<div id="game-log-container" class="border border-dark rounded">
+    <h3>Events</h3>
+    <div id="game-log">
+    </div>
+</div>
+
+<div class="container-flex justify-content-center">
+    <input type="hidden" id="gameid" name="custId" value="{{game.get_id()}}">
+    <input type="hidden" id="gamemode" value="{{game.is_multiplayer()}}">
+    <input type="hidden" id="imagePath" name="custId" value="{{game.get_imagePath()}}">
+    <input type="hidden" id="all-images" name="custId" value="{{game.get_allImages()}}">
+
+    <div class="d-inline-block">
+        <h2>Proposer</h2>
+    </div>
+    <div class="d-inline-block ml-3">
+        <button class="btn-danger btn" onclick="leaveGame();">End game</button>
+    </div>
+    <h2 id="image-label" class="ml-3"></h2>
+    {% if game.valid_game() %}
+    <button id="startBtn" class="btn btn-success ml-3" onclick="startGame();">Start Game</button>
+    {% else %}
+    <button id="startBtn" class="btn btn-success ml-3" onclick="startGame();" style="display: none;">Start Game</button>
+    {% endif %}
+    <div class="images">
+        {% for image in game.get_allImages() %}
+        <img src="{{ "https://dat240-group-8.firebaseapp.com/images/" + game.get_imagePath() + "_scattered/" + image }}"
+            id="{{ image }}" width="400" class="image-section">
+        {% endfor %}
+    </div>
+    <div class="canvases"> </div>
+</div>
+
+<div class="modal fade" id="guesserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Game ended</h5>
+            </div>
+            <div class="modal-body">
+                <p id="finishMessage"></p>
+            </div>
+            <div class="modal-footer justify-center">
+                <a href="/dashboard" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">Back to
+                    dashboard</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='js/proposer.js') }}"></script>
+<script>
+    $('.images').hide()
+    const gameid = document.querySelector('#gameid').value
+    {% if game.is_multiplayer() %}
+    isMultiplayer = true;
+    {% endif %}
+    game_id_str = "{{game.get_id()}}";
+    window.onload = startProposerWs("{{game.get_id()}}", "{{user_id}}");
+</script>
+{% endblock %}

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-151024922-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-151024922-1');
+    </script>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- Websocket -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"
+        integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script data-ad-client="ca-pub-8796420826027120" async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <title>{{title}} - Guess what?</title>
+
+    <style>
+        body {
+            background: url("../background.png") no-repeat center center fixed;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+
+        .navbar-default {
+            background: #113559;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+
+<body>
+    {% if title == 'Welcome' %}
+    <nav class="navbar navbar-dark navbar-default fixed-top">
+        <a class="navbar-brand" href="#">Guess what?</a>
+    </nav>
+    {% else %}
+    <nav class="navbar navbar-dark navbar-default navbar-expand-lg fixed-top">
+        <a class="navbar-brand" href={{url_for('dashboard')}}>Guess what?</a>
+        <ul class="navbar-nav mr-auto">
+
+        </ul>
+        <span style="color: #ffffff; margin-right: 1em">{{ username }} <b>Points: </b>{{ points }}</span>
+        <a class="btn btn-outline-warning" href={{url_for('logout')}} role="button">Log Out</a>
+    </nav>
+    {% endif %}
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <strong>Info:</strong> {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    {% block script %}{% endblock %}
+
+    <script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" data-cfasync="false"></script>
+    <script>
+        window.cookieconsent.initialise({
+            "palette": {
+                "popup": {
+                    "background": "#1d8a8a"
+                },
+                "button": {
+                    "background": "#62ffaa"
+                }
+            },
+            "theme": "classic",
+            "position": "bottom-left",
+            "content": {
+                "href": "{{url_for('privacy')}}"
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}    
+<div class="jumbotron jumbotron-fluid" style="background: none;">
+    <div class="container">
+        <img src="logo.png" alt="Guess What logo :)" style="width:30vw;">
+        <p class="lead ml-5" style="color:white;">Can you Guess What?&trade;</p>
+    </div>
+</div>
+
+<div class="container-fluid mb-5">
+    <div class="row">
+        <div class="col-sm-12 col-lg-6 mt-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Login</h5>
+                    <form action="" method="POST" novalidate>
+                        {{ wtf.form_field(form.login.username) }}
+                        {{ wtf.form_field(form.login.password) }}
+                        {{ wtf.form_field(form.login.submit, class="btn btn-primary") }}
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-lg-6 mt-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Create a new player profile</h5>
+                    <form action="", method="POST" novalidate>
+                        {{ wtf.form_field(form.register.username) }}
+                        {{ wtf.form_field(form.register.password) }}
+                        {{ wtf.form_field(form.register.confirm_password) }}
+                        {{ wtf.form_field(form.register.submit, class="btn btn-primary") }}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

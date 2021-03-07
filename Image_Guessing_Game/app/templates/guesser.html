@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+<div class="container-flex justify-content-center ml-3">
+
+     <div class="d-inline-block">
+        <h2>Guesser</h2>
+      </div>
+      <div class="d-inline-block ml-3">
+          <button class="btn-danger btn" onclick="leaveGame();">Leave game</button>
+      </div>
+    <div id="guess-input" class="input-group mb-3 mt-3" style="width: 400px;display: none;">
+        <input id="guess-field" type="text" class="form-control" placeholder="Type guess here..."
+            aria-label="Type guess here..." aria-describedby="basic-addon2">
+        <div class="input-group-append">
+            <button onclick="newGuess();" class="btn btn-success" type="button">Guess</button>
+            {% if not game.is_multiplayer() %}
+            <button id="propose-btn" onclick="requestPropose();" class="btn btn-warning" type="button">Request new</button>
+            {% endif %}
+        </div>
+        <input type="hidden" id="gameid" name="custId" value="{{game.get_id()}}">
+        <input type="hidden" id="ismultiplayer" value="{{game.is_multiplayer()}}">
+    </div>
+    <div id="image-container">
+        {% for image in game.get_proposedImages() %}
+        <img src="{{ "https://dat240-group-8.firebaseapp.com/images/" + game.get_imagePath() + "_scattered/" + image + ".png" }}"
+            width="400" class="image-section">
+        {% endfor %}
+    </div>
+
+    <div id="game-log-container" class="border border-dark rounded">
+        <h3>Events</h3>
+        <div id="game-log" class="guesser-log">
+        </div>
+        <div class="input-group" id="input-chat">
+            <input id="chat-field" type="text" class="form-control" placeholder="Type message here..." aria-label="Type message here..." aria-describedby="basic-addon2">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary" onclick="sendChat();" type="button">Send</button>
+            </div>
+          </div>
+    </div>
+
+    <div class="modal fade" id="guesserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Game ended</h5>
+            </div>
+            <div class="modal-body">
+              <p id="finishMessage"></p>
+            </div>
+            <div class="modal-footer justify-center">
+                <a href="/dashboard" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">Back to dashboard</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    <script src="{{ url_for('static', filename='js/guesser.js') }}"></script>
+    <script>
+        game_id_str = "{{game.get_id()}}";
+        window.onload = startGuesserWs("{{game.get_id()}}", "{{user_id}}");
+    </script>
+    {% endblock %}

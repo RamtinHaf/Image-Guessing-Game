@@ -1,0 +1,24 @@
+{% for game in games %}
+    {% if game.get_gamemode_string() == mode%}
+        <tr id="{{game.get_id()}}">
+            <td>{{game.get_id()}}</td>
+            <td>{{game.get_numbers_of_players()}}</td>
+            <td>
+                <form action="/join" method="POST">
+                <button name="join" value="{{game.get_id()}}" class="btn btn-success">Join</button>
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    {% if not game.get_proposer() %}
+                    <label class="btn btn-secondary active"><input type="radio" name="role" value="proposer" autocomplete="off"
+                            checked>Proposer</label>
+                    <label class="btn btn-secondary"><input type="radio" name="role" value="guesser"
+                            autocomplete="off">Guesser</label>
+                    {% else %}
+                    <label class="btn btn-secondary active"><input type="radio" name="role" value="guesser" autocomplete="off"
+                            checked>Guesser</label>
+                    {% endif %}
+                </div>
+                </form>
+            </td>
+        </tr>
+    {% endif %}
+{% endfor %}
